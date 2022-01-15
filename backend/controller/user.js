@@ -122,11 +122,8 @@ exports.userlogin = async (req, res, next) => {
 exports.allUsers = async (req, res) => {
    
     const keyword = req.query.search
-    ?  { first_name: { $regex: req.query.search, $options: "i" } }  
+    ?  { first_name: { $regex: req.query.search, $options: "i" }, role:{$ne:3} }  
     : {};
-//   console.log("keyword",keyword)
-//    var data = localStorage.getItem("userInfo")
-//    console.log("userId",req.user._id)
   const users = await User.find(keyword).find({ _id: { $ne: req.user._id} });
   
   res.send(users);
@@ -228,6 +225,20 @@ exports.getUserById = async (req, res) => {
             return res.json({ statusCode: 400, message: "Data Not Found" })
         }
         return res.json({ statusCode: 200, data: result })
+    }).catch((err) => {
+        return res.json({ statusCode: 500, message: "Something went wrong" })
+    })
+}
+exports.getAllBroker = async (req, res) => {
+    User.find({role:2}).then((result) => {
+        return res.json({ statusCode: 200, message:"Broker list" ,data: result })
+    }).catch((err) => {
+        return res.json({ statusCode: 500, message: "Something went wrong" })
+    })
+}
+exports.getAllClient = async (req, res) => {
+    User.find({role:1}).then((result) => {
+        return res.json({ statusCode: 200, message:"Client list", data: result })
     }).catch((err) => {
         return res.json({ statusCode: 500, message: "Something went wrong" })
     })
