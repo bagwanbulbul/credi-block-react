@@ -10,7 +10,7 @@ router.use(bodyParser.json());
 
 
 const {
-    userSignup,userlogin,getUser, forgotPassword, verify_otp,getUserById,allUsers
+    userSignup,userlogin,getUser, forgotPassword, verify_otp,getUserById,allUsers, getAllBroker, getAllClient
 }= require("../controller/user")
 const {protect} = require("../middleware/authMiddleware")
 
@@ -19,7 +19,9 @@ router.post("/userlogin",userlogin);
 router.get("/getUser",getUser);
 router.post("/forgotpassword",forgotPassword);
 router.post("/verify_otp",verify_otp);
-router.get("/getUserById",getUserById)
-router.get("/allUsers",protect,allUsers)
+router.get("/getUserById",getUserById);
+router.get("/allUsers",protect,allUsers);
+router.get("/getAllBroker",getAllBroker);
+router.get("/getAllClient",getAllClient);
 
 module.exports = router;

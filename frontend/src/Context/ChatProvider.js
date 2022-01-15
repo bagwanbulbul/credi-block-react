@@ -9,8 +9,8 @@ const ChatProvider = ({ children }) => {
   const [chats,setChats]=useState([]);
   const history = useHistory();
    
-  useEffect(() => {
-    const userInfo = JSON.parse(sessionStorage.getItem("userInfo"));
+  useEffect( async () => {
+    const userInfo = await JSON.parse(sessionStorage.getItem("userInfo"));
     console.log("Login user ",userInfo)
     setUser(userInfo);    //fetch localstroage
     if (userInfo === "") {history.push("/")}

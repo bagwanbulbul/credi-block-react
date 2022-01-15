@@ -28,28 +28,31 @@ export default function Optional_Login() {
      var error = "please fill email and password"
 
   const submitHander = async () => {
-    // console.log(role)
     setLoading(true);
     if (!email || !password) {
         console.log("loginerror",error)
         setLoading(false);
-      return;
+        return;
     }
         try {
-         const config = {
+            const config = {
                headers: {
                "Content-type": "application/json",
               },
-           };
-      const { data } = await axios.post("http://localhost:3111/userLogin?" + role, { email, password }, config  );
-      console.log("login data" ,data)
-     sessionStorage.setItem("userInfo", JSON.stringify(data));
-      setLoading(false);
-     History.push("/chat");
-    } catch (error) {
-        console.log("error",error)
-        setLoading(false);
-    }
+            };
+            const { data } = await axios.post("http://localhost:3111/userLogin?" + role, { email, password }, config  );
+            console.log("login data" ,data)
+            await sessionStorage.setItem('userInfo',JSON.stringify(data))
+            var userStorage = await JSON.parse(sessionStorage.getItem('userInfo'))
+            console.log("userStorage",userStorage)
+            if(userStorage && data.statusCode == 200){
+                console.log("kkkkkkkkk")
+                History.push("/chat");
+            }
+        }catch(error) {
+            console.log("error",error)
+            setLoading(false);
+        }
   };
 
 

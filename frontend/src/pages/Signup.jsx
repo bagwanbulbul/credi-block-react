@@ -25,8 +25,7 @@ const [role, setrole] = useState("");
 
 useEffect(() => {
     $("#passwordmismatch").hide()
-    // $("#firstName").hide()
-    // $("#lastName").hide()
+    $("#firstName").hide()
     $("#email1").hide()
     $("#password1").hide()
     $("#password2").hide()
