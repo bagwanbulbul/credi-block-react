@@ -230,6 +230,11 @@ exports.getUserById = async (req, res) => {
     })
 }
 exports.getAllBroker = async (req, res) => {
+    var search = req.query.search
+    var query = {role:2}
+    if(req.query.search){
+        query.first_name = ( { $regex: search, $options: "i" })
+    }
     User.find({role:2}).then((result) => {
         return res.json({ statusCode: 200, message:"Broker list" ,data: result })
     }).catch((err) => {
@@ -237,7 +242,12 @@ exports.getAllBroker = async (req, res) => {
     })
 }
 exports.getAllClient = async (req, res) => {
-    User.find({role:1}).then((result) => {
+    var search = req.query.search
+    var query = {role:1}
+    if(req.query.search){
+        query.first_name = ( { $regex: search, $options: "i" })
+    }
+    User.find(query).then((result) => {
         return res.json({ statusCode: 200, message:"Client list", data: result })
     }).catch((err) => {
         return res.json({ statusCode: 500, message: "Something went wrong" })
