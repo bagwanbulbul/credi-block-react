@@ -7,49 +7,48 @@ import axios from 'axios';
 
 export default function Optional_Login() {
 
-    let History= useHistory()
 
-    useEffect(() => {
-        const user = JSON.parse(localStorage.getItem("userInfo"))
-        if(user){
-            History.push("/chat")
-        }
-    },[History]);
+    // useEffect(() => {
+    //     const user = JSON.parse(sessionStorage.getItem("userInfo"))
+    //     if(user){
+    //         History.push("/chat")
+    //     }
+    // },[History]);
 
 
     const [email, setEmail] = useState("");
     const [password,setPassword] = useState("");
-    var url_string = window.location.href;
+    const [loading, setLoading] = useState(false);
+    let History= useHistory()
+
+
+     var url_string = window.location.href;
      const splitUrl = url_string.split('/')
- 
      var role = splitUrl[4]
-    
+     var error = "please fill email and password"
 
-    var error = "please fill email and password"
-
-const submitHander = async () => {
-    console.log(role)
+  const submitHander = async () => {
+    // console.log(role)
+    setLoading(true);
     if (!email || !password) {
         console.log("loginerror",error)
+        setLoading(false);
       return;
     }
         try {
          const config = {
-         headers: {
-          "Content-type": "application/json",
-        },
-      };
-      const { data } = await axios.post(
-        "http://localhost:3111/userLogin?" + role,
-        { email, password },
-        config
-      );
-    console.log("login data" ,data)
-      sessionStorage.setItem("userInfo", JSON.stringify(data));
-      History.push("/chat");
+               headers: {
+               "Content-type": "application/json",
+              },
+           };
+      const { data } = await axios.post("http://localhost:3111/userLogin?" + role, { email, password }, config  );
+      console.log("login data" ,data)
+     sessionStorage.setItem("userInfo", JSON.stringify(data));
+      setLoading(false);
+     History.push("/chat");
     } catch (error) {
-
-    
+        console.log("error",error)
+        setLoading(false);
     }
   };
 
@@ -75,7 +74,7 @@ const submitHander = async () => {
                                             <div className="form-group">
                                                 <label className="fw-regular">Email Address</label>
                                                 <input type="email" className="form-control validate" name="email" id="exampleInputEmail1"
-                                                 placeholder="you@example.com" onChange={(e) => setEmail(e.target.value)} />
+                                                 placeholder="you@example.com" onChange={(e) => setEmail(e.target.value)}  value={email} />
                                             </div>
                                        
                                      
@@ -83,7 +82,7 @@ const submitHander = async () => {
                                                 <label className="fw-regular w-100" >Password <a href="javascript:;"
                                                     className="underline color-away float-right" id="flip" >Forgot Password?</a></label>
                                                 <input type="password" className="form-control validate" name="password" id="exampleInputPassword1"
-                                                    placeholder="Enter 6 character or more" onChange={(e) => setPassword(e.target.value)}/>
+                                                    placeholder="Enter 6 character or more" onChange={(e) => setPassword(e.target.value)}    value={password}/>
                                             </div>   
 
                                    
@@ -92,7 +91,7 @@ const submitHander = async () => {
                                                 <label className="form-check-label fs-14" >Remember me</label>
                                             </div>
 
-                                            <button className="button uppercase w-100 text-center" onClick={submitHander}>Login</button>
+                                            <button className="button uppercase w-100 text-center" onClick={submitHander}  isLoading={loading}>Login</button>
                                         </div>
                                 </div>
                             </div>
