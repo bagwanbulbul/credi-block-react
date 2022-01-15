@@ -40,7 +40,7 @@ export default function SingleChat( { fetchAgain, setFetchAgain }) {
       };
 
     }
-    fetchAgain, 
+
     useEffect( () => {
       socket = io(ENDPOINT);
       socket.emit("setup",user);
