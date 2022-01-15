@@ -25,7 +25,7 @@ exports.userSignup = async (req, res) => {
             confirmpassword,
             pic
         } = req.body
-        
+
         var role = req.body.role       //client:1, broker:2, supervisor:3
         if (req.body.role == "Client") {
             role = 1;
@@ -35,8 +35,11 @@ exports.userSignup = async (req, res) => {
         if (req.body.role == "Supervisor") {
             role = 3;
         }
-        // console.log("role", role)
-        // console.log("password", req.body)
+        
+        if(first_name == undefined || first_name == "" || email== undefined || email =="" || password == undefined || password == "" || confirmpassword == undefined || confirmpassword == "" || role == undefined || role==""){
+            return res.json({statusCode:403, statusMsj:"please fill required filed"})
+        }
+
         var hash_transaction = crypto.randomBytes(8).toString('hex');
         console.log("hash_transaction", hash_transaction.length)
         const hashedPassword = await hashPassword(password);
@@ -62,7 +65,7 @@ exports.userSignup = async (req, res) => {
         let response = new User(newUser)
         response.save()
             .then((result) => {
-                return res.json({ statusCode: "200", statusMsj: "Successfuly Register", data: result })
+                return res.json({ statusCode: 200, statusMsj: "Successfuly Register", data: result })
             }).catch((err) => {
                 console.log(err)
                 return res.send(err)
@@ -80,9 +83,6 @@ exports.userlogin = async (req, res, next) => {
             password,
         } = req.body;
         const role = req.query.role
-
-
-        console.log("role", role)
 
         const user = await User.findOne({ email });
         console.log("user",user)
