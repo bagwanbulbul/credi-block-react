@@ -25,10 +25,10 @@ const [role, setrole] = useState("");
 
 useEffect(() => {
     $("#passwordmismatch").hide()
-    $("#firstName").hide()
-    $("#lastName").hide()
+    // $("#firstName").hide()
+    // $("#lastName").hide()
     $("#email1").hide()
-    $("#password1").hide()
+    // $("#password1").hide()
 }, [])
 
 
@@ -45,7 +45,7 @@ useEffect(() => {
             $("#email1").show() 
            }
            if(response.data.statusCode ==200){
-                // Histroy.push("/")
+                 Histroy.push("/")
            }
         })
  }
