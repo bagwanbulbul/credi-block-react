@@ -25,10 +25,12 @@ export default function Optional_Login() {
      var url_string = window.location.href;
      const splitUrl = url_string.split('/')
      var role = splitUrl[4]
+
+
      var error = "please fill email and password"
 
   const submitHander = async () => {
-    // console.log(role)
+     console.log(role)
     setLoading(true);
     if (!email || !password) {
         console.log("loginerror",error)
@@ -44,8 +46,13 @@ export default function Optional_Login() {
       const { data } = await axios.post("http://localhost:3111/userLogin?" + role, { email, password }, config  );
       console.log("login data" ,data)
      sessionStorage.setItem("userInfo", JSON.stringify(data));
-      setLoading(false);
-     History.push("/chat");
+
+     if(data.data.role == 3){
+         History.push("/supervisor")
+     }else{
+          History.push("/chat");
+     }
+    
     } catch (error) {
         console.log("error",error)
         setLoading(false);

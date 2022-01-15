@@ -4,6 +4,7 @@ import OptionalLogin from './pages/Optional_Login';
 import Signup from './pages/Signup';
 import {Switch, Route} from 'react-router-dom'
 import Chat from './pages/Chat';
+import SuperVisor from './pages/SuperVisor';
 // import ForgetPassword from './Pages/ForgetPassword';
 // import FabricView from './Pages/FabricView';
 
@@ -18,6 +19,7 @@ function App() {
       <Route path="/optional-login/role=3" component={OptionalLogin}/>
       <Route path="/signup" component={Signup}/>
       <Route path="/chat" component={Chat}/> 
+      <Route path="/supervisor" component={SuperVisor}/> 
     </Switch>
     </div>
   );
