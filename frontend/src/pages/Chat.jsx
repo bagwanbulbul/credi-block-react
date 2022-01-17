@@ -25,7 +25,6 @@ export default function Chat() {
                   <h3 className="fw-bold ">Credi<span className="fw-light">Block</span></h3>
                 </div>
               </div>
-             
             </div>
           </div>
         </div>
@@ -43,11 +42,6 @@ export default function Chat() {
           </div>
         </div>
       </div> 
-
-
-      
-      
-
     </>
   )
 }

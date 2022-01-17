@@ -3,6 +3,7 @@ import React, { useState } from 'react'
 import { ChatState } from '../Context/ChatProvider'
 import UserListItem from './UserListItem';
 import { useHistory } from "react-router-dom";
+import UserImg from '../asset/image/userimg.png'
 
 import axios from 'axios';
 
@@ -12,6 +13,7 @@ export default function SideDrawer() {
     const [loadingChat, setLoadingChat] = useState(false);
     const [searchResult, setSearchResult] = useState([]);
     const { user, setSelectedChat, chats, setChats } = ChatState();
+    const [brokerList, setBrokerList] = useState("")
     const history = useHistory();
 
 
@@ -35,22 +37,28 @@ export default function SideDrawer() {
                     Authorization: `Bearer ${user.accessToken}`,
                 },
             };
-            console.log("sidedrewerconfig", config)
+            // console.log("sidedrewerconfig", config)
             const { data } = await axios.get(`http://localhost:3111/allUsers?search=${search}`, config);
             console.log("getalluser data", data)
-
             setSearchResult(data);
         } catch (error) {
             console.log("errror", error)
         }
     };
 
-
+const allBroker = async () => {
+    await axios.get("http://localhost:3111/getAllBroker").then(res => {
+        console.log(res.data.data)
+        setBrokerList(res.data.data)
+    }).catch(err => {
+        console.log(err)
+    })
+}
 
 
     //createChat 
     const accessChat = async (userId) => {
-        console.log("accessdata userId", userId);
+        // console.log("accessdata userId", userId);
         try {
             const config = {
                 headers: {
@@ -58,10 +66,11 @@ export default function SideDrawer() {
                     Authorization: `Bearer ${user.accessToken}`,
                 },
             };
-            console.log("con", config)
+            // console.log("con", config)
             const { data } = await axios.post(`http://localhost:3111/chat/accesschat2`, { userId }, config);
-            console.log("data", data)
-            if (!chats.find((c) => c._id === data._id)) setChats([data, ...chats]);
+            console.log("data", data)   
+            console.log("chats",chats)
+            if (!chats.find((c) =>  c._id === data._id)) setChats([data, ...chats]);
             setSelectedChat(data);
             setLoadingChat(false);
 
@@ -82,15 +91,25 @@ export default function SideDrawer() {
             <section className="bgcolor-lgrey py-4">
                 <div className="container">
                     <div className="row">
-                        <div className="col-lg-4 d-flex ">
-                            <input className="form-control mr-sm-2" type="search" placeholder="Search" data-bs-toggle="offcanvas" href="#offcanvasExample" />
+                        <div className="col-lg-12 d-flex ">
+                            <input className="form-control mr-sm-2 serarchbar" type="search" placeholder="Search" data-bs-toggle="offcanvas" href="#offcanvasExample" />
                             <button className="btn btn-outline-success my-2 my-sm-0">Search</button>
-                        </div>
-                        <div className="col-lg-3 col-md-3 col-sm-12  text-right sm:text-center">
+                         
+                    
+                       <div className='logoutbtn'>
                             <button id="userId" href="fabricview.html?id=" className="btn btn_info">View on Fabric</button>
                             <button className="btn btn_info  text-white" onClick={logoutHandler}>Logout</button>
-                        </div>
+                         </div>
+                         <div>
+                         <img className='profile_pic' src={UserImg}/>
+                            <p>{user.data.first_name}</p>
+                         </div>
+                          
+                
+                            
+                   
                     </div>
+                </div>
                 </div>
             </section>
 
@@ -102,13 +121,18 @@ export default function SideDrawer() {
                 <hr />
                 <div className="offcanvas-body" >
                     <div className='col-lg-12 px-0 '>
-                        <div className="input-group mb-3">
+                        <div className="input-group mb-3 d-flex ">
                             <input type="text" className="form-control" placeholder="Search..." value={search} onChange={(e) => { setSearch(e.target.value) }} />
                             <div className="input-group-append">
                                 <button className="btn btn-primary text-white" type="button" onClick={handleSearch}>Go</button>
                             </div>
+                            <button className="btn btn-primary text-white" type="button" onClick={allBroker} style={{marginLeft:"10px"}}>ViewBroker</button>
+                        </div>
+                        <div>
+                        
                         </div>
                     </div>
+
                     {
                         searchResult.map((user) => {
                             // console.log("searchlist",user)
@@ -121,6 +145,10 @@ export default function SideDrawer() {
                             )
                         })
                     }
+                {/* {brokerList.map((e) => {
+
+                })} */}
+                    
 
                 </div>
             </div>

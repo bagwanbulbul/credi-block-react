@@ -124,10 +124,12 @@ exports.allUsers = async (req, res) => {
     const keyword = req.query.search
     ?  { first_name: { $regex: req.query.search, $options: "i" }, role:{$ne:3} }  
     : {};
-  const users = await User.find(keyword).find({ _id: { $ne: req.user._id} });
+   const users = await User.find(keyword).find({ _id: { $ne: req.user._id} });
+    //  const users = await User.find(keyword);
   
   res.send(users);
 }
+
 
 
 
