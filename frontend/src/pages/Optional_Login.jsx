@@ -3,6 +3,8 @@ import Header from '../common/Header';
 import Footer from '../common/Footer';
 import { Link ,useHistory } from 'react-router-dom';
 import axios from 'axios';
+import $ from 'jquery';
+
 
 
 export default function Optional_Login() {
@@ -14,6 +16,19 @@ export default function Optional_Login() {
     //         History.push("/chat")
     //     }
     // },[History]);
+    useEffect(() => {
+        $("#password1").hide()
+        $("#password2").hide()
+        $("#email1").hide()
+        $("#emailcheck").hide();
+    },[]);
+
+    $(".validate").focus(function(){
+        $("#email1").hide();
+        $("#password1").hide();
+        $("#password2").hide();
+        $("#emailcheck").hide();
+    })
 
 
     const [email, setEmail] = useState("");
@@ -32,28 +47,41 @@ export default function Optional_Login() {
   const submitHander = async () => {
      console.log(role)
     setLoading(true);
-    if (!email || !password) {
-        console.log("loginerror",error)
-        setLoading(false);
-        return;
+    if(!email){
+        $("#email1").show();
     }
-        try {
-            const config = {
-               headers: {
-               "Content-type": "application/json",
-              },
-           };
-      const { data } = await axios.post("http://localhost:3111/userLogin?" + role, { email, password }, config  );
-      console.log("login data" ,data)
-     sessionStorage.setItem("userInfo", JSON.stringify(data));
-
-     if(data.data.role == 3){
-         History.push("/supervisor")
-     }else{
-          History.push("/chat");
-     }
-    
-    } catch (error) {
+    if(!password){
+        $("#password1").show();
+    }
+    // if (!email || !password) {
+    //     console.log("loginerror",error)
+    //     setLoading(false);
+    //     return;
+    // }
+    try{
+        const config = {
+            headers: {
+            "Content-type": "application/json",
+            },
+        };
+        const { data } = await axios.post("http://localhost:3111/userLogin?" + role, { email, password }, config  );
+        console.log("login data" ,data)
+        sessionStorage.setItem("userInfo", JSON.stringify(data));
+        if(data.statusCode == 401){
+            $("#emailcheck").show();
+        }
+        if(data.statusCode == 402){
+            $("#password2").show();
+        }
+        if(data.statusCode == 403){
+            alert("Incorrect Role")
+        }
+        if(data.data.role == 3){
+            History.push("/supervisor")
+        }else{
+            History.push("/chat");
+        }
+    }catch (error) {
         console.log("error",error)
         setLoading(false);
     }
@@ -82,6 +110,8 @@ export default function Optional_Login() {
                                                 <label className="fw-regular">Email Address</label>
                                                 <input type="email" className="form-control validate" name="email" id="exampleInputEmail1"
                                                  placeholder="you@example.com" onChange={(e) => setEmail(e.target.value)}  value={email} />
+                                                <p className='error' id="email1">*Enter Valid Email</p>
+                                                <p className='error' id="emailcheck">*Email does not exist!</p>
                                             </div>
                                        
                                      
@@ -90,6 +120,9 @@ export default function Optional_Login() {
                                                     className="underline color-away float-right" id="flip" >Forgot Password?</a></label>
                                                 <input type="password" className="form-control validate" name="password" id="exampleInputPassword1"
                                                     placeholder="Enter 6 character or more" onChange={(e) => setPassword(e.target.value)}    value={password}/>
+                                                    <p className='error' id="password1"> *Enter Password</p>
+                                                    <p className='error' id="password2">*Password is not correct!</p>
+
                                             </div>   
 
                                    
