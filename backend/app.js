@@ -20,7 +20,7 @@ app.use(cors())
 const mongoose = require('mongoose')
 
 mongoose
-  .connect('mongodb+srv://roshan:user12@cluster0.uoxgo.mongodb.net/credit-block?retryWrites=true&w=majority', {
+  .connect(process.env.MONGO1, {
     useUnifiedTopology: true,
     useNewUrlParser: true
   })

@@ -10,7 +10,7 @@ export default function UserListItem({user,handleFunction }) {
                     <div className="col-sm-12">
                         <div className='searchlist '>
                             {user.first_name} {user.last_name} 
-                            {user.email}  
+                          
                         </div>
                       
                     </div>
